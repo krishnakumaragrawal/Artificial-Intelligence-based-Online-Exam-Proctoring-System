@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel = "stylesheet" href = "../static/login_style.css">
+    <title>Home Page</title>
+    <link rel="icon" href="../static/images/Portal.jpg" type="image/x-icon">
+</head>
+<body>
+    <div id="myDiv">
+        <div id="logo">
+            <img src="../static/images/Portal.jpg" width="180px"/>
+        </div>
+        <div class="copyright">
+			Exam Portal 
+			<br>
+			Letting you in...
+        </div>
+    <div class="dots-3"></div>
+    </div>
+
+    <div id="container" class="container">
+		<!-- FORM SECTION -->
+		<div class="row">
+			<!-- SIGN UP -->
+			<div class="col align-items-center flex-col sign-up">
+				<div class="form-wrapper align-items-center">
+					<div class="form sign-up">
+						<div class="input-group">
+							<i class='bx bxs-user'></i>
+							<input id = "email-signup" type = "email" placeholder = "Email *">
+						</div>
+						<div class="input-group">
+							<i class='bx bx-mail-send'></i>
+							<input id = "username-signup" type = "name" placeholder = "Username *"></input>
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input id = "password-signup" type = "password" placeholder = "Password *"></input>
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input id = "confirm-password-signup" type = "password" placeholder = "Confirm Password *"></input>
+						</div>
+						<button id = "create-acct-btn">Create Account</button>
+						<p>
+							<span>
+								Already have an account?
+							</span>
+							<b onclick="toggle()" class="pointer">
+								Sign in here
+							</b>
+						</p>
+					</div>
+				</div>
+			</div>
+			<!-- END SIGN UP -->
+			<!-- SIGN IN -->
+			<div class="col align-items-center flex-col sign-in">
+				<div class="form-wrapper align-items-center">
+					<div class="form sign-in">
+						<div class="input-group">
+							<i class='bx bxs-user'></i>
+							<input id = "email" type = "text" placeholder = "Email &#42;"></input>
+						</div>
+						<div class="input-group">
+							<i class='bx bxs-lock-alt'></i>
+							<input id = "password" type = "password" placeholder = "Password &#42;"></input>
+						</div>
+						<button id = "submit">Submit</button>
+						<p>
+							<b class="forget-btn pointer">
+								Forgot password?
+							</b>
+						</p>
+						<p>
+							<span>
+								Don't have an account?
+							</span>
+							<b onclick="toggle()" class="pointer">
+								Sign up here
+							</b>
+						</p>
+					</div>
+				</div>
+				<div class="form-wrapper">
+				</div>
+			</div>
+			<!-- END SIGN IN -->
+		</div>
+		<!-- END FORM SECTION -->
+		<!-- CONTENT SECTION -->
+		<div class="row content-row">
+			<!-- SIGN IN CONTENT -->
+			<div class="col align-items-center flex-col">
+				<div class="text sign-in">
+					<h2>
+						Login to Continue 
+					</h2>
+				</div>
+				<div class="img sign-in">
+				</div>
+			</div>
+			<!-- END SIGN IN CONTENT -->
+			<!-- SIGN UP CONTENT -->
+			<div class="col align-items-center flex-col">
+				<div class="img sign-up">
+				</div>
+				<div class="text sign-up">
+					<h2>
+						Sign Up to Continue 
+					</h2>
+				</div>
+			</div>
+			<!-- END SIGN UP CONTENT -->
+		</div>
+		<!-- END CONTENT SECTION -->
+	</div>
+
+    <script>
+
+		document.querySelector(".container").classList.add("hidden");
+		setTimeout(function(){
+			document.getElementById("myDiv").style.display = "none";
+			document.querySelector(".container").classList.remove("hidden");
+		},5000);
+    
+		let container = document.getElementById('container')
+		toggle = () => {
+			container.classList.toggle('sign-in')
+			container.classList.toggle('sign-up')
+		}
+		setTimeout(() => {
+			container.classList.add('sign-in')
+		}, 5200)
+	</script>
+
+</body>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="../static/login_script.js"></script>
+</html>

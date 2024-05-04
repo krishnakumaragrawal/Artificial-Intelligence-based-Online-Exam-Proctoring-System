@@ -1,0 +1,39 @@
+AI Based Online Exam Proctoring System
+
+
+
+
+Folders :- 
+1. backend                 - File Interacting with SQL server
+2. object_detection_model  - Object Detection downloaded YOLO model 
+3. shape_predictor_model   - face detection model 
+4. static                  - website stuffs (img, css & js files)
+5. templates               - website html files (2files)
+
+
+
+Files - 
+1. facial_detections.py     - Face Detection
+2. eye_tracker.py           - Eye Detection
+3. blink_detection.py       - Blink Detection to avoid duplicate person
+4. head_pose_estimation.py  - Head Pose detection for tracking the move
+5. mouth_tracking.py        - Mouth Detection to avoid speaking (cheat)
+6. object_detection.py      - Object detection to detect electronic acc.
+7. audio_detection.py       - Audio Detection to detect frequency
+8. main.py                  - Main Project File
+9. app.py                   - Main Project File (For Web)
+10.server.py                - Server file code (flask)
+11.temp.py                  - Temperory files for testing individual func.
+
+12. activity.txt            - Student data Generated log file
+
+
+
+
+Requirements - 
+
+1. HTML, CSS (Frontend)
+2. JS, Python (Backend)
+3. SQL (Database)
+4. Flask (Server)
+5. Libraries (OpenCV, numpy, pyaudio, winsound, dlib)
