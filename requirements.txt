@@ -1,0 +1,15 @@
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.27,<1.0
+SQLAlchemy>=2.0,<3.0
+alembic>=1.13,<2.0
+psycopg[binary]>=3.1,<4.0
+numpy>=1.24,<3.0
+opencv-python-headless>=4.9,<5.0
+dlib>=19.24,<20.0
+imutils>=0.5,<1.0
+passlib>=1.7,<2.0
+argon2-cffi>=23.1,<26.0
+PyJWT>=2.8,<3.0
+python-multipart>=0.0.9,<1.0
+pytest>=8.0,<9.0
+httpx>=0.27,<1.0

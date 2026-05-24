@@ -12,10 +12,7 @@ with open("object_detection_model/objectLabels/coco.names","r") as file:
     label_classes = [name.strip() for name in file.readlines()]
 
 layer_names = net.getLayerNames()
-# print(type(layer_names))
-# layer_names = [i for i in layer_names]
-# print(type(layer_names))
-output_layers = [layer_names[layer-1] for layer in net.getUnconnectedOutLayers()]
+output_layers = [layer_names[int(layer) - 1] for layer in np.array(net.getUnconnectedOutLayers()).flatten()]
 
 colors = np.random.uniform(0,255,size=(len(label_classes),3))
 
@@ -66,6 +63,7 @@ def detectObject(frame):
                 class_ids.append(class_id)
 
     indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
+    indexes = set(np.array(indexes).flatten().tolist()) if len(indexes) else set()
 
     for i in range(len(boxes)):
         if i in indexes:
