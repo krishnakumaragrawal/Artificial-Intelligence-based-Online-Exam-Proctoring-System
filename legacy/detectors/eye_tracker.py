@@ -2,9 +2,9 @@ import dlib
 import cv2
 import numpy as np
 
+from legacy.detectors.paths import SHAPE_PREDICTOR_MODEL
 
-shapePredictorModel  = 'shape_predictor_model/shape_predictor_68_face_landmarks.dat'
-shapePredictor = dlib.shape_predictor(shapePredictorModel)
+shapePredictor = dlib.shape_predictor(str(SHAPE_PREDICTOR_MODEL))
 
 
 def createMask(frame):
@@ -49,8 +49,10 @@ def gazeDetection(faces, frame):
     leftEye = [36,37,38,39,40,41]
     rightEye = [42,43,44,45,46,47]
 
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
     for face in faces:
-        facialLandmarks = shapePredictor(frame, face)
+        facialLandmarks = shapePredictor(gray, face)
 
         leftEyeRegion = np.array([(facialLandmarks.part(i).x, facialLandmarks.part(i).y) for i in leftEye], np.int32)
         rightEyeRegion = np.array([(facialLandmarks.part(i).x, facialLandmarks.part(i).y) for i in rightEye], np.int32)

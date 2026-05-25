@@ -2,7 +2,7 @@ import numpy as np
 import dlib
 import math
 import cv2
-# from facial_detections import detectFace
+from legacy.detectors.paths import SHAPE_PREDICTOR_MODEL
 
 def get_2d_points(img, rotation_vector, translation_vector, camera_matrix, val):
     
@@ -94,8 +94,7 @@ camera_matrix = np.array(
     [0, 0, 1]], dtype = "double"
 )
 
-shapePredictorModel  = 'shape_predictor_model/shape_predictor_68_face_landmarks.dat'
-shapePredictor = dlib.shape_predictor(shapePredictorModel)
+shapePredictor = dlib.shape_predictor(str(SHAPE_PREDICTOR_MODEL))
 
 # while True:
 #     ret, img = cap.read()
@@ -103,9 +102,10 @@ shapePredictor = dlib.shape_predictor(shapePredictorModel)
 #         faceCount, faces = detectFace(img)
     
 def head_pose_detection(faces, img):
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     for face in faces:
-        marks = shapePredictor(img, face)
+        marks = shapePredictor(gray, face)
 
         image_points = np.array([
             [marks.part(30).x, marks.part(30).y],    #Nose tip

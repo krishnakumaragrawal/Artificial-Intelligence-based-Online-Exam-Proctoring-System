@@ -167,6 +167,21 @@ class ReviewDecisionPublic(ORMModel):
     created_at: datetime
 
 
+class ReviewAttemptSummary(BaseModel):
+    attempt_id: int
+    exam_id: int
+    exam_title: str
+    candidate_email: str
+    candidate_username: str
+    status: AttemptStatus
+    score: Optional[float]
+    started_at: datetime
+    due_at: datetime
+    submitted_at: Optional[datetime]
+    event_count: int
+    latest_event_type: Optional[str] = None
+
+
 class AttemptTimeline(BaseModel):
     attempt: AttemptPublic
     events: List[ProctoringEventPublic]

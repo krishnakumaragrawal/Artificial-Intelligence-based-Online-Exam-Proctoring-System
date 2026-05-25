@@ -3,8 +3,9 @@ import dlib
 from math import hypot
 import cv2
 
-shapePredictorModel  = 'shape_predictor_model/shape_predictor_68_face_landmarks.dat'
-shapePredictor = dlib.shape_predictor(shapePredictorModel)
+from legacy.detectors.paths import SHAPE_PREDICTOR_MODEL
+
+shapePredictor = dlib.shape_predictor(str(SHAPE_PREDICTOR_MODEL))
 
 
 def midPoint(pointA, pointB):

@@ -1,11 +1,11 @@
 import cv2
-from facial_detections import detectFace
-from eye_tracker import gazeDetection
-from blink_detection import isBlinking
-from head_pose_estimation import head_pose_detection
-from mouth_tracking import mouthTrack
-from object_detection import detectObject
-from audio_detection import audio_detection
+from legacy.detectors.facial_detections import detectFace
+from legacy.detectors.eye_tracker import gazeDetection
+from legacy.detectors.blink_detection import isBlinking
+from legacy.detectors.head_pose_estimation import head_pose_detection
+from legacy.detectors.mouth_tracking import mouthTrack
+from legacy.detectors.object_detection import detectObject
+from legacy.detectors.audio_detection import audio_detection
 
 cam = cv2.VideoCapture(0)
 

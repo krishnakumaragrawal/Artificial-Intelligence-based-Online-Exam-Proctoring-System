@@ -1,0 +1,17 @@
+.env
+.venv/
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/*.tsbuildinfo
+frontend/**/*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+evidence/
+proctoring.db
+*.db
+*.sqlite
+*.sqlite3

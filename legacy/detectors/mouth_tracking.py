@@ -2,8 +2,9 @@ import dlib
 import cv2
 from math import hypot
 
-predictorModel = 'shape_predictor_model/shape_predictor_68_face_landmarks.dat'
-predictor = dlib.shape_predictor(predictorModel)
+from legacy.detectors.paths import SHAPE_PREDICTOR_MODEL
+
+predictor = dlib.shape_predictor(str(SHAPE_PREDICTOR_MODEL))
 
 def calcDistance(pointA, pointB):
 
@@ -13,10 +14,10 @@ def calcDistance(pointA, pointB):
 
 
 def mouthTrack(faces, frame):
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     for face in faces:
-
-        facialLandmarks = predictor(frame, face)
+        facialLandmarks = predictor(gray, face)
 
         #outer lip top point
         outerTopX = facialLandmarks.part(51).x
@@ -36,4 +37,3 @@ def mouthTrack(faces, frame):
         return -1
 
         # cv2.putText(frame, "Threshold - "+ str(30), (50,400), cv2.FONT_HERSHEY_PLAIN,2,(0,255,255),5)
-        

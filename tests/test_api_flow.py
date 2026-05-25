@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import pytest
 from fastapi.testclient import TestClient
 
 from proctoring_platform.api.routes.proctoring import get_frame_analyzer
@@ -26,7 +27,7 @@ class FakeFrameAnalyzer:
         )
 
 
-def _client(tmp_path: Path) -> TestClient:
+def _client(tmp_path: Path, **settings_overrides) -> TestClient:
     settings = Settings(
         database_url=f"sqlite:///{tmp_path / 'test.db'}",
         jwt_secret="test-secret-with-at-least-thirty-two-bytes",
@@ -34,6 +35,7 @@ def _client(tmp_path: Path) -> TestClient:
         seed_sample_data=True,
         bootstrap_admin_email="admin@example.com",
         bootstrap_admin_password="AdminPass123",
+        **settings_overrides,
     )
     app = create_app(settings)
     app.dependency_overrides[get_frame_analyzer] = lambda: FakeFrameAnalyzer()
@@ -42,6 +44,42 @@ def _client(tmp_path: Path) -> TestClient:
 
 def _auth_header(token: str) -> dict:
     return {"Authorization": f"Bearer {token}"}
+
+
+def test_production_rejects_default_jwt_secret(tmp_path):
+    settings = Settings(
+        environment="production",
+        database_url=f"sqlite:///{tmp_path / 'test.db'}",
+        bootstrap_admin_email="admin@example.com",
+        bootstrap_admin_password="AdminPass123",
+    )
+
+    with pytest.raises(ValueError, match="JWT_SECRET"):
+        create_app(settings)
+
+
+def test_frame_upload_rejects_oversized_payload(tmp_path):
+    with _client(tmp_path, max_frame_upload_bytes=8) as client:
+        signup = client.post(
+            "/auth/signup",
+            json={"email": "student@example.com", "username": "student", "password": "Password123"},
+        )
+        student_token = signup.json()["access_token"]
+        exam_id = client.get("/exams", headers=_auth_header(student_token)).json()[0]["id"]
+        attempt = client.post(
+            "/attempts",
+            headers=_auth_header(student_token),
+            json={"exam_id": exam_id, "client_fingerprint": "browser-test"},
+        )
+        session_id = attempt.json()["proctoring_session_id"]
+
+        frame_analysis = client.post(
+            f"/proctoring/sessions/{session_id}/analyze-frame",
+            headers=_auth_header(student_token),
+            files={"file": ("frame.jpg", b"too-large", "image/jpeg")},
+        )
+
+        assert frame_analysis.status_code == 413
 
 
 def test_student_attempt_flow_records_answer_event_and_submission(tmp_path):
@@ -125,3 +163,9 @@ def test_student_attempt_flow_records_answer_event_and_submission(tmp_path):
         assert timeline.status_code == 200
         event_types = {item["event_type"] for item in timeline.json()["events"]}
         assert {"TAB_SWITCH", "MOUTH_OPEN", "PHONE_DETECTED", "AUDIO_SPIKE"}.issubset(event_types)
+
+        review_attempts = client.get("/review/attempts", headers=_auth_header(admin_token))
+        assert review_attempts.status_code == 200
+        assert review_attempts.json()[0]["attempt_id"] == attempt_id
+        assert review_attempts.json()[0]["candidate_email"] == "student@example.com"
+        assert review_attempts.json()[0]["event_count"] == 4

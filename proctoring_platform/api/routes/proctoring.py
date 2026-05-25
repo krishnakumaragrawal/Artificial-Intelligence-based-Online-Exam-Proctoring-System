@@ -66,6 +66,16 @@ def _save_evidence_asset(
     return asset
 
 
+def _read_upload_limited(file: UploadFile, max_bytes: int, label: str) -> bytes:
+    content = file.file.read(max_bytes + 1)
+    if len(content) > max_bytes:
+        raise HTTPException(
+            status_code=status.HTTP_413_CONTENT_TOO_LARGE,
+            detail=f"{label} upload exceeds the {max_bytes} byte limit",
+        )
+    return content
+
+
 def _persist_detector_event(
     db: Session,
     session: ProctoringSession,
@@ -130,8 +140,9 @@ def upload_evidence(
     settings: Settings = Depends(get_request_settings),
 ) -> EvidenceAsset:
     session = _get_owned_session(db, session_id, current_user)
+    content = _read_upload_limited(file, settings.max_evidence_upload_bytes, "Evidence")
     store = FileSystemEvidenceStore(settings.evidence_dir)
-    storage_key, byte_size, digest = store.save(session.id, file.filename or "evidence.bin", file.file)
+    storage_key, byte_size, digest = store.save(session.id, file.filename or "evidence.bin", BytesIO(content))
 
     asset = EvidenceAsset(
         session_id=session.id,
@@ -156,7 +167,7 @@ def analyze_frame(
     analyzer: Any = Depends(get_frame_analyzer),
 ) -> FrameAnalysisResponse:
     session = _get_owned_session(db, session_id, current_user)
-    content = file.file.read()
+    content = _read_upload_limited(file, settings.max_frame_upload_bytes, "Frame")
     if not content:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Frame upload is empty")
 
@@ -211,7 +222,7 @@ def analyze_audio(
     analyzer: PCM16AudioAnalyzer = Depends(get_audio_analyzer),
 ) -> AudioAnalysisResponse:
     session = _get_owned_session(db, session_id, current_user)
-    content = file.file.read()
+    content = _read_upload_limited(file, settings.max_audio_upload_bytes, "Audio")
     if not content:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Audio upload is empty")
 

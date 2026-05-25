@@ -11,6 +11,7 @@ from proctoring_platform.seeds import bootstrap_admin, seed_sample_exam
 
 def create_app(settings: Settings = None) -> FastAPI:
     app_settings = settings or get_settings()
+    app_settings.validate_runtime_security()
     configure_database(app_settings.database_url)
 
     @asynccontextmanager

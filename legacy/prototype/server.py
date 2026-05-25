@@ -1,7 +1,7 @@
 from flask import Flask, render_template, Response, request, jsonify
 from flask_cors import CORS
-from backend.db_helper import *
-from main import *
+from legacy.prototype.backend.db_helper import *
+from legacy.prototype.main import *
 import os
 import sys
 

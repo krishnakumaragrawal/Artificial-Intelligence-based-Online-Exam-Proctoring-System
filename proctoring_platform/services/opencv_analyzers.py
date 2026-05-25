@@ -28,12 +28,12 @@ class LegacyDetectorFunctions:
 
 def load_legacy_detector_functions() -> LegacyDetectorFunctions:
     try:
-        from blink_detection import isBlinking
-        from eye_tracker import gazeDetection
-        from facial_detections import detectFace
-        from head_pose_estimation import head_pose_detection
-        from mouth_tracking import mouthTrack
-        from object_detection import detectObject
+        from legacy.detectors.blink_detection import isBlinking
+        from legacy.detectors.eye_tracker import gazeDetection
+        from legacy.detectors.facial_detections import detectFace
+        from legacy.detectors.head_pose_estimation import head_pose_detection
+        from legacy.detectors.mouth_tracking import mouthTrack
+        from legacy.detectors.object_detection import detectObject
     except Exception as exc:
         raise DetectorUnavailable(f"OpenCV/Dlib detector dependencies are unavailable: {exc}") from exc
 
@@ -68,6 +68,15 @@ class LegacyOpenCVFrameAnalyzer:
         working_frame = frame.copy()
         events: List[DetectorEvent] = []
         signals: Dict[str, Any] = {}
+
+        objects = self._safe_call("objects", signals, self.detectors.detect_object, working_frame)
+        if objects is not None:
+            normalized_objects = [
+                {"label": label, "confidence": float(confidence)}
+                for label, confidence in objects
+            ]
+            signals["objects"] = normalized_objects
+            self._append_object_events(normalized_objects, events)
 
         face_count, faces = self.detectors.detect_face(working_frame)
         signals["face_count"] = face_count
@@ -121,15 +130,6 @@ class LegacyOpenCVFrameAnalyzer:
             signals["head_pose"] = head_pose
             if isinstance(head_pose, str) and head_pose.startswith("Head "):
                 events.append(DetectorEvent(event_type="HEAD_AWAY", confidence=0.82, payload={"pose": head_pose}))
-
-        objects = self._safe_call("objects", signals, self.detectors.detect_object, frame)
-        if objects is not None:
-            normalized_objects = [
-                {"label": label, "confidence": float(confidence)}
-                for label, confidence in objects
-            ]
-            signals["objects"] = normalized_objects
-            self._append_object_events(normalized_objects, events)
 
     def _append_object_events(self, objects: List[Dict[str, Any]], events: List[DetectorEvent]) -> None:
         for detected in objects:

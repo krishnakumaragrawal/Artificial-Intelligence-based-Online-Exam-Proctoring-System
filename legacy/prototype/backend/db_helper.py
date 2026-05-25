@@ -1,13 +1,22 @@
+import os
+
 import mysql.connector
 global cnx
 global isInserted
 
-#Create a connection to the database
+def _required_env(name):
+    value = os.getenv(name)
+    if not value:
+        raise RuntimeError(f"{name} must be set before running the legacy prototype database helper")
+    return value
+
+
+# Create a connection to the database.
 cnx = mysql.connector.connect(
-    host="localhost", 
-    user="root", 
-    password="root", 
-    database="quizo"
+    host=os.getenv("LEGACY_MYSQL_HOST", "localhost"),
+    user=_required_env("LEGACY_MYSQL_USER"),
+    password=_required_env("LEGACY_MYSQL_PASSWORD"),
+    database=os.getenv("LEGACY_MYSQL_DATABASE", "quizo"),
 )
 
 def get_all_details():
@@ -68,6 +77,4 @@ def search_login_credentials(email, password):
 
 if __name__ == "__main__":
     print(get_all_details())
-    # print(search_login_credentials('kumar1166@gmail.com', 'Kris@2223'))
-    # insert_signup('kumar1166@gmail.com', 'kris6', 'Kris@2223')
     # print(get_all_details())

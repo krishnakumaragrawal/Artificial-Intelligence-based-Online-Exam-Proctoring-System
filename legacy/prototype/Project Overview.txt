@@ -1,0 +1,39 @@
+AI Based Online Exam Proctoring System
+
+
+
+
+Folders :-
+1. legacy/prototype/backend  - File interacting with SQL server
+2. legacy/models/object_detection_model  - Object detection downloaded YOLO model
+3. legacy/models/shape_predictor_model   - Face detection model
+4. legacy/prototype/static   - Website assets (img, css & js files)
+5. legacy/prototype/templates - Website html files (2 files)
+
+
+
+Files -
+1. legacy/detectors/facial_detections.py     - Face Detection
+2. legacy/detectors/eye_tracker.py           - Eye Detection
+3. legacy/detectors/blink_detection.py       - Blink Detection to avoid duplicate person
+4. legacy/detectors/head_pose_estimation.py  - Head Pose detection for tracking the move
+5. legacy/detectors/mouth_tracking.py        - Mouth Detection to avoid speaking (cheat)
+6. legacy/detectors/object_detection.py      - Object detection to detect electronic acc.
+7. legacy/detectors/audio_detection.py       - Audio Detection to detect frequency
+8. legacy/prototype/main.py                  - Main Project File
+9. legacy/prototype/app.py                   - Main Project File (For Web)
+10. legacy/prototype/server.py               - Server file code (flask)
+11. legacy/prototype/temp.py                 - Temporary file for testing individual funcs.
+
+12. legacy/prototype/activity.txt            - Student data generated log file
+
+
+
+
+Requirements -
+
+1. HTML, CSS (Frontend)
+2. JS, Python (Backend)
+3. SQL (Database)
+4. Flask (Server)
+5. Libraries (OpenCV, numpy, pyaudio, winsound, dlib)

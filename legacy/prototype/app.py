@@ -1,12 +1,12 @@
 import cv2
 import imutils
 import time
-from facial_detections import detectFace
-from blink_detection import isBlinking
-from mouth_tracking import mouthTrack
-from object_detection import detectObject
-from eye_tracker import gazeDetection
-from head_pose_estimation import head_pose_detection 
+from legacy.detectors.facial_detections import detectFace
+from legacy.detectors.blink_detection import isBlinking
+from legacy.detectors.mouth_tracking import mouthTrack
+from legacy.detectors.object_detection import detectObject
+from legacy.detectors.eye_tracker import gazeDetection
+from legacy.detectors.head_pose_estimation import head_pose_detection
 import winsound
 from datetime import datetime
 
